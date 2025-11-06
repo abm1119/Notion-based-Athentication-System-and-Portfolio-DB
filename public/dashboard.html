@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Notion Auth System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h2>Dashboard</h2>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </nav>
+        
+        <div class="dashboard-content">
+            <div class="welcome-section">
+                <h1>Welcome, <span id="userName">User</span>!</h1>
+                <p class="subtitle">Manage your profile and showcase your graphic design work.</p>
+            </div>
+            
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-cards">
+                    <a href="/case-studies" class="action-card">
+                        <div class="action-icon">🎨</div>
+                        <h3>Case Studies</h3>
+                        <p>Showcase your graphic design work and projects</p>
+                    </a>
+                    <a href="/database-viewer" class="action-card">
+                        <div class="action-icon">🗄️</div>
+                        <h3>Database Viewer</h3>
+                        <p>View complete database content and records</p>
+                    </a>
+                    <div class="action-card" onclick="document.getElementById('editBtn').click()">
+                        <div class="action-icon">👤</div>
+                        <h3>Edit Profile</h3>
+                        <p>Update your personal information</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h2>Profile Information</h2>
+                
+                <div class="profile-view" id="profileView">
+                    <div class="profile-item">
+                        <label>Email:</label>
+                        <span id="displayEmail">Loading...</span>
+                    </div>
+                    <div class="profile-item">
+                        <label>Full Name:</label>
+                        <span id="displayFullName">Not set</span>
+                    </div>
+                    <div class="profile-item">
+                        <label>Phone:</label>
+                        <span id="displayPhone">Not set</span>
+                    </div>
+                    <div class="profile-item">
+                        <label>Member Since:</label>
+                        <span id="displayCreatedAt">Loading...</span>
+                    </div>
+                    
+                    <button id="editBtn" class="btn btn-primary">Edit Profile</button>
+                </div>
+                
+                <div class="profile-edit" id="profileEdit" style="display: none;">
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                        </div>
+                        
+                        <div id="updateMessage" class="success-message"></div>
+                        <div id="updateError" class="error-message"></div>
+                        
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

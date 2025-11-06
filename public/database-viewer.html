@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Viewer - Notion Auth System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .database-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .database-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e1e5e9;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .database-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .records-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .record-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            transition: background-color 0.2s ease;
+        }
+        
+        .record-item:hover {
+            background-color: #f8fafc;
+        }
+        
+        .record-item:last-child {
+            border-bottom: none;
+        }
+        
+        .record-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .record-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .record-meta {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        
+        .record-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+        
+        .detail-value {
+            color: #374151;
+            word-break: break-word;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-not-started {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .status-in-progress {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-completed, .status-done {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .cover-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+        
+        .notion-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        .notion-link:hover {
+            text-decoration: underline;
+        }
+        
+        .refresh-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: auto;
+        }
+        
+        .refresh-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>Database Viewer</h2>
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/case-studies">Case Studies</a>
+                <a href="/completed-projects">Projects</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="database-container">
+        <div class="database-tabs">
+            <button class="tab-button active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-button" onclick="switchTab('users')">Users Database</button>
+            <button class="tab-button" onclick="switchTab('case-studies')">Case Studies Database</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="database-stats" id="overview-stats">
+                <div class="loading">Loading overview...</div>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="users-tab" class="tab-content">
+            <div class="records-table">
+                <div class="table-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Users Database Records</span>
+                        <button class="refresh-btn" onclick="loadUsers()">Refresh</button>
+                    </div>
+                </div>
+                <div id="users-content">
+                    <div class="loading">Loading users...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case Studies Tab -->
+        <div id="case-studies-tab" class="tab-content">
+            <div class="records-table">
+                <div class="table-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Case Studies Database Records</span>
+                        <button class="refresh-btn" onclick="loadCaseStudies()">Refresh</button>
+                    </div>
+                </div>
+                <div id="case-studies-content">
+                    <div class="loading">Loading case studies...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/database-viewer.js"></script>
+</body>
+</html>
